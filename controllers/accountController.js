@@ -3,18 +3,9 @@ const Account = require('../models/accountModel');
 exports.getAllAccounts = async (req, res) => {
     try {
         const accounts = await Account.find();
-        res.status(200).json({
-            status: 'success',
-            results: accounts.length,
-            data: {
-                accounts
-            }
-        });
+        res.status(200).json(accounts);
     } catch (err) {
-        res.status(404).json({
-            status: 'fail',
-            message: err
-        })
+        res.status(404).json(err);
     }
 };
 
@@ -38,17 +29,9 @@ exports.getAccount = async (req, res) => {
 exports.createAccount = async (req, res) => {
     try {
         const newAccount = await Account.create(req.body);
-        res.status(201).json({
-            status: 'success',
-            data: {
-                account: newAccount
-            }
-        });
+        res.status(201).json(newAccount);
     } catch (err) {
-        res.status(400).json({
-            status: 'fail',
-            message: err
-        })
+        res.status(400).json(err)
     }
 };
 
@@ -56,7 +39,7 @@ exports.updateAccount = async (req, res) => {
     try {
         const accountToUpdate = await Account.findByIdAndUpdate(
             +req.params.id,
-            req.body, 
+            req.body,
             {
                 new: true,
                 runValidators: true
@@ -87,6 +70,6 @@ exports.deleteAccount = async (req, res) => {
         res.status(400).json({
             status: 'fail',
             message: err
-        }) 
+        })
     }
-}; 
+};
