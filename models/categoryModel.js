@@ -9,7 +9,7 @@ const categorySchema = new mongoose.Schema({
     },
     colour: {
         type:  String,
-        required: [true, 'A category must have a color'],
+        required: [true, 'A category must have a colour'],
         trim: true
     }
 });
