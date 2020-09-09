@@ -40,7 +40,7 @@ exports.updateCategory = handleAsyncError(async (req, res, next) => {
 });
 
 exports.deleteCategory = handleAsyncError(async (req, res, next) => {
-    const categoryToDelete = await Category.findByIdAndDelete(+req.params.id);
+    const categoryToDelete = await Category.findByIdAndDelete(req.params.id);
 
     if (!categoryToDelete) {
         return next(new AppError('No category found with this ID', 404));

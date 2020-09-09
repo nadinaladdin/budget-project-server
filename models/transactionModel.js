@@ -41,10 +41,10 @@ const transactionSchema = new mongoose.Schema({
 transactionSchema.pre(/^find/, function(next) {
     this.populate({
         path: 'category',
-        select: 'name'
+        select: 'name colour'
     }).populate({
         path: 'account',
-        select: 'name colour'
+        select: 'name'
     });
     next();
 });
