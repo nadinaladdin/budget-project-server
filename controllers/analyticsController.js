@@ -13,7 +13,7 @@ exports.getBalance = handleAsyncError(async (req, res, next) => {
             }
         }
     ]);
-    res.status(200).json(balance);
+    res.status(200).json(balance[0].total);
 });
 
 //GET analitycs/accounts-debits

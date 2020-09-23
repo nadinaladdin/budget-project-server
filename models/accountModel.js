@@ -10,7 +10,11 @@ const accountSchema = new mongoose.Schema({
         type: Number,
         default: 0
     }
-});
+    },
+    {
+        toJSON: { virtuals: true },
+    }
+);
 
 const Account = mongoose.model('Account', accountSchema);
 

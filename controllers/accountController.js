@@ -40,7 +40,7 @@ exports.updateAccount = handleAsyncError(async (req, res, next) => {
 });
 
 exports.deleteAccount = handleAsyncError(async (req, res, next) => {
-    const accountToDelete = await Account.findByIdAndDelete(+req.params.id);
+    const accountToDelete = await Account.findByIdAndDelete(req.params.id);
 
     if (!accountToDelete) {
         return next(new AppError('No account found with this ID', 404));

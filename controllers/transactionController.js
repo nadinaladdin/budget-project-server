@@ -54,7 +54,7 @@ exports.updateTransaction = handleAsyncError(async (req, res, next) => {
 });
 
 exports.deleteTransaction = handleAsyncError(async (req, res, next) => {
-    const transactionToDelete = await Transaction.findByIdAndDelete(+req.params.id);
+    const transactionToDelete = await Transaction.findByIdAndDelete(req.params.id);
 
     if (!transactionToDelete) {
         return next(new AppError('No transaction found with this ID', 404));
