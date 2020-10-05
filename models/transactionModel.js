@@ -29,7 +29,7 @@ const transactionSchema = new mongoose.Schema({
     account: {
         type: mongoose.Schema.ObjectId,
         ref: 'Account',
-        required: [true, 'A transaction must have a category']
+        required: [true, 'A transaction must have an account']
     }
 },
 {

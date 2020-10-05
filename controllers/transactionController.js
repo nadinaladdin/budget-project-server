@@ -1,3 +1,4 @@
+const Account = require('../models/accountModel');
 const Transaction = require('../models/transactionModel');
 const AppError = require('../utils/appError');
 const handleAsyncError = require('../utils/handleAsyncError');
@@ -33,6 +34,8 @@ exports.getTransaction = handleAsyncError(async (req, res, next) => {
 
 exports.createTransaction = handleAsyncError(async (req, res, next) => {
     const newTransaction = await Transaction.create(req.body);
+    const newSum = newTransaction.account.sum + (newTransaction.sum * newTransaction.type === 'credit' ? -1 : 1);
+    await Account.findByIdAndUpdate(newTransaction.account.id, {sum: newSum})
     res.status(201).json(newTransaction);
 });
 
