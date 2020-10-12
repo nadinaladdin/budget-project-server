@@ -34,8 +34,12 @@ exports.getTransaction = handleAsyncError(async (req, res, next) => {
 
 exports.createTransaction = handleAsyncError(async (req, res, next) => {
     const newTransaction = await Transaction.create(req.body);
-    const newSum = newTransaction.account.sum + (newTransaction.sum * newTransaction.type === 'credit' ? -1 : 1);
-    await Account.findByIdAndUpdate(newTransaction.account.id, {sum: newSum})
+    const account = await Account.findById(newTransaction.account);
+    const newSum = account.sum + (newTransaction.sum * (newTransaction.type === 'credit' ? -1 : 1));
+    await Account.findByIdAndUpdate(newTransaction.account, {sum: newSum},
+        {
+            runValidators: true
+        });
     res.status(201).json(newTransaction);
 });
 

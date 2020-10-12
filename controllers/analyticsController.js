@@ -50,22 +50,23 @@ exports.getAccountsDebits = handleAsyncError(async (req, res, next) => {
 //GET analytics/month-expenses/:year/:month
 exports.getMonthlyExpenses = handleAsyncError(async (req, res, next) => {
     const year = +req.params.year;
-    const month = +req.params.month - 1;
+    const month = +req.params.month;
     const lastMonthDay = (new Date(year, month + 1, 0)).getDate();
 
-    const monthlyExpenses = await Transaction.aggregate([
+    const monthlyExpensesData = await Transaction.aggregate([
         {
             $match: {
                 date: {
                     $gte: new Date(Date.UTC(year, month, 1)),
                     $lte: new Date(Date.UTC(year, month, lastMonthDay)),
-                }
+                },
+                category: {$ne:null}
             }
         },
         {
             $group: {
                  _id: '$category',
-                total: { $sum: '$sum'}
+                sum: { $sum: '$sum'},
             }
         },
         {
@@ -82,5 +83,16 @@ exports.getMonthlyExpenses = handleAsyncError(async (req, res, next) => {
             }
         }
     ]);
+
+    const monthlyExpenses = {
+        total: monthlyExpensesData.reduce((accumulator, currentValue) => accumulator + currentValue.sum, 0),
+        expenses: monthlyExpensesData.map(item => {
+            return {
+                name: item.category[0].name,
+                value: item.sum,
+                colour: item.category[0].colour,
+            }
+        })
+    };
     res.status(200).json(monthlyExpenses);
 });
