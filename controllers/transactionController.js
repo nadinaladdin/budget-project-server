@@ -22,7 +22,7 @@ exports.getAllTransactions = handleAsyncError(async (req, res, next) => {
 });
 
 exports.getTransaction = handleAsyncError(async (req, res, next) => {
-    const transaction = await Transaction.findById(+req.params.id);
+    const transaction = await Transaction.findById(req.params.id);
 
     if (!transaction) {
         return next(new AppError('No transaction found with this ID', 404));
@@ -45,7 +45,7 @@ exports.createTransaction = handleAsyncError(async (req, res, next) => {
 
 exports.updateTransaction = handleAsyncError(async (req, res, next) => {
     const transactionToUpdate = await Transaction.findByIdAndUpdate(
-        +req.params.id,
+        req.params.id,
         req.body, 
         {
             new: true,
