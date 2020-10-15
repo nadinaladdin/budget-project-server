@@ -16,12 +16,20 @@ exports.getBalance = handleAsyncError(async (req, res, next) => {
     res.status(200).json(balance[0].total);
 });
 
-//GET analitycs/accounts-debits
+//GET analitycs/accounts-debits/:year/:month
 exports.getAccountsDebits = handleAsyncError(async (req, res, next) => {
-    const accountsDebits = await Transaction.aggregate([
+    const year = +req.params.year;
+    const month = +req.params.month;
+    const lastMonthDay = (new Date(year, month + 1, 0)).getDate();
+
+    const accountsDebitsData = await Transaction.aggregate([
         {
             $match: {
-                type: {$eq: 'debit'}
+                type: {$eq: 'debit'},
+                date: {
+                    $gte: new Date(Date.UTC(year, month, 1)),
+                    $lte: new Date(Date.UTC(year, month, lastMonthDay)),
+                },
             }
         },
         {
@@ -44,6 +52,13 @@ exports.getAccountsDebits = handleAsyncError(async (req, res, next) => {
             }
         }
     ]);
+    const accountsDebits = accountsDebitsData.map(item => {
+        return {
+            account: item.account[0],
+            transactions: item.transactions
+        }
+    });
+    
     res.status(200).json(accountsDebits);
 });
 

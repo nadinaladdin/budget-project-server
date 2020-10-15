@@ -12,7 +12,7 @@ router
     .get(analyticsController.getBalance);
 
 router
-    .route('/accounts-debits')
+    .route('/accounts-debits/:year/:month')
     .get(analyticsController.getAccountsDebits);
 
 module.exports = router;
