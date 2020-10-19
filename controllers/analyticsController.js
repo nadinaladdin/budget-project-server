@@ -5,7 +5,7 @@ const handleAsyncError = require('../utils/handleAsyncError');
 
 //GET analytics/balance
 exports.getBalance = handleAsyncError(async (req, res, next) => {
-    const balance = await Account.aggregate([
+    const balanceData = await Account.aggregate([
         {
             $group: {
                 _id: null,
@@ -13,7 +13,8 @@ exports.getBalance = handleAsyncError(async (req, res, next) => {
             }
         }
     ]);
-    res.status(200).json(balance[0].total);
+    const balance = balanceData[0] ? balanceData[0].total : 0;
+    res.status(200).json(balance);
 });
 
 //GET analitycs/accounts-debits/:year/:month
